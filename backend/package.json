@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "foodi app",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js"
   },
   "keywords": [
     "react",
@@ -13,6 +14,12 @@
   "author": "shubham patil",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.2"
   }
 }
