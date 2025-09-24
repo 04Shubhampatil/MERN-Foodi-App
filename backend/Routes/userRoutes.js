@@ -15,7 +15,7 @@ router.post("/login", LogIn);
 router.get("/logout",isAuthenticated, logout);
 
 // Get user
-router.get("/getuser/:id",isAuthenticated, getUser);
+router.get("/:id",isAuthenticated, getUser);
 
 
 export default router;

@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import connectDB from './db/db.js'
 import cookieParser from 'cookie-parser';
 import userRoutes from './Routes/userRoutes.js'
+import recipeRoutes from './Routes/recipeRoute.js'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/user', userRoutes)
+app.use('/api/recipe', recipeRoutes)
 
 
 app.listen(PORT, () => {
