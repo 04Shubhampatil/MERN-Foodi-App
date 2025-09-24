@@ -2,8 +2,20 @@
 import User from "../Models/userModel.js";
 import ApiError from "../utils/Apierror.js";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
-
+const getUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.id)
+        return res.status(200).json({
+            message: "User fetched successfully",
+            user,
+            success: true
+        })
+    } catch (error) {
+        throw new ApiError(500, error.message)
+    }
+}
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
     try {
@@ -59,14 +71,14 @@ const LogIn = async (req, res) => {
 
         const token = jwt.sign({ user: user._id }, process.env.SECRET_KEY)
 
-        user = {
+        const newUser = {
             _id: user._id,
             name: user.name,
             email: user.email,
             Profile: user.Profile
 
         }
-         return res
+        return res
             .status(200)  // Set HTTP status code to 200 OK
             .cookie("token", token, {   // Set a cookie named "token"
                 maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day in milliseconds
@@ -74,7 +86,7 @@ const LogIn = async (req, res) => {
             })
             .json({   // Send JSON response body
                 message: `Welcome back ${user.name}`,
-                user: user,
+                user: newUser,
                 success: true
             });
     } catch (error) {
@@ -107,6 +119,7 @@ const logout = async (req, res) => {
 export {
     registerUser,
     LogIn,
-    logout
+    logout,
+    getUser
 
 }

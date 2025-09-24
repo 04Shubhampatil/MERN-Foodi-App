@@ -1,5 +1,7 @@
 import express from "express";
-import { registerUser, logIn, logout } from "../Controllers/authController.js";
+import { registerUser, LogIn, logout, getUser } from "../Controller/userControler.js";
+import  isAuthenticated  from "../Middleware/isAuthentication.js";
+
 
 const router = express.Router();
 
@@ -7,9 +9,13 @@ const router = express.Router();
 router.post("/register", registerUser);
 
 // Login user
-router.post("/login", logIn);
+router.post("/login", LogIn);
 
 // Logout user
-router.get("/logout", logout);
+router.get("/logout",isAuthenticated, logout);
+
+// Get user
+router.get("/getuser/:id",isAuthenticated, getUser);
+
 
 export default router;
