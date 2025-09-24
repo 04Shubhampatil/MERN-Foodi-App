@@ -17,10 +17,15 @@ const getUser = async (req, res) => {
     }
 }
 const registerUser = async (req, res) => {
-    const { name, email, password } = req.body;
-    try {
 
-        if (!name || !email || !password) {
+    try {
+        const { fullname, email, password } = req.body
+        console.log(fullname, email, password);
+        
+
+
+        if (!fullname || !email || !password) {
+
             throw new ApiError(400, "All fields are required");
         }
         const user = await User.findOne({
@@ -33,7 +38,7 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
 
         const newUser = await User.create({
-            name,
+            fullname,
             email,
             password: hashedPassword,
         })
@@ -73,19 +78,19 @@ const LogIn = async (req, res) => {
 
         const newUser = {
             _id: user._id,
-            name: user.name,
+            fullname: user.fullname,
             email: user.email,
             Profile: user.Profile
 
         }
         return res
             .status(200)  // Set HTTP status code to 200 OK
-            .cookie("token", token, {   // Set a cookie named "token"
+            .cookie("token", token, {   // Set a cookie fullnamed "token"
                 maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day in milliseconds
                 httpOnly: true  // Secure: can't be accessed from frontend JavaScript
             })
             .json({   // Send JSON response body
-                message: `Welcome back ${user.name}`,
+                message: `Welcome back ${user.fullname}`,
                 user: newUser,
                 success: true
             });
