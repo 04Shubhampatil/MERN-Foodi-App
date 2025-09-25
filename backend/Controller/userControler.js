@@ -3,6 +3,8 @@ import User from "../Models/userModel.js";
 import ApiError from "../utils/Apierror.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import cloudinary from "../utils/cloudinary.js";
+import getDataUri from "../utils/datauri.js";
 
 const getUser = async (req, res) => {
     try {
@@ -28,6 +30,13 @@ const registerUser = async (req, res) => {
 
             throw new ApiError(400, "All fields are required");
         }
+
+         const file = req.file; // optional, for resume/profile image
+        const fileUri = getDataUri(file);
+        const cloudResponce = await cloudinary.uploader.upload(fileUri.content, {
+            resource_type: "auto",  //  Important for PDF, video, etc.
+        });
+
         const user = await User.findOne({
             $or: [{ email: email }]
         });
@@ -41,6 +50,7 @@ const registerUser = async (req, res) => {
             fullname,
             email,
             password: hashedPassword,
+            Profile: cloudResponce.secure_url
         })
         return res.status(201).json({
             message: "User registered successfully",
