@@ -38,7 +38,7 @@ function Navbar() {
     { label: "My Recipe", to: "/myrecipe" }, // Fixed: Changed "/recipes" to "/myrecipe"
     { label: "Favourite", to: "/favourite" },
     { label: "Login", to: "/login" },
-    { label: "Logout", to: "/logout" },
+    { label: "SignUp", to: "/SignUp" },
   ];
 
   return (

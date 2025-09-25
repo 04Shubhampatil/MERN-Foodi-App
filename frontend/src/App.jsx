@@ -3,8 +3,8 @@ import Home from "./pages/Home.jsx";
 import MyRecipe from "./pages/MyRecipe.jsx";
 import Favourite from "./pages/Favourite.jsx"; // Fixed: Capitalized component name
 import Login from "./components/auth/Login.jsx";
-import SignUp from "./components/auth/signUp.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SignUp from "./components/auth/SignUp.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 

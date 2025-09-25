@@ -1,20 +1,16 @@
 import Recipe from "../Models/recipeModel.js";
-import ApiError from "../utils/Apierror.js";
-
 
 const createRecipe = async (req, res) => {
     try {
         const { title, ingredients, instructions, time, coverImage } = req.body;
 
-        if (
-            !title ||
-            !ingredients ||
-            !instructions ||
-            !time 
-            
-        ) {
-            throw new ApiError(400, "All fields are required");
+        if (!title || !ingredients || !instructions || !time) {
+            return res.status(400).json({
+                message: "All fields are required",
+                success: false
+            });
         }
+
         const newRecipe = await Recipe.create({
             title,
             ingredients,
@@ -22,15 +18,21 @@ const createRecipe = async (req, res) => {
             time,
             coverImage,
         });
+
         return res.status(201).json({
             message: "Recipe created successfully",
             recipe: newRecipe,
             success: true,
         });
+
     } catch (error) {
-        throw new ApiError(500, error.message);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false
+        });
     }
 };
+
 const getRecipe = async (req, res) => {
     try {
         const recipes = await Recipe.find();
@@ -39,48 +41,91 @@ const getRecipe = async (req, res) => {
             recipes,
             success: true,
         });
+
     } catch (error) {
-        throw new ApiError(500, error.message);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false
+        });
     }
 };
+
 const getRecipebyId = async (req, res) => {
     try {
         const recipe = await Recipe.findById(req.params.id);
+        
+        if (!recipe) {
+            return res.status(404).json({
+                message: "Recipe not found",
+                success: false
+            });
+        }
+
         return res.status(200).json({
             message: "Recipe fetched successfully",
             recipe,
             success: true,
         });
+
     } catch (error) {
-        throw new ApiError(500, error.message);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false
+        });
     }
-}
+};
 
 const deleteRecipe = async (req, res) => {
     try {
         const recipe = await Recipe.findByIdAndDelete(req.params.id);
+        
+        if (!recipe) {
+            return res.status(404).json({
+                message: "Recipe not found",
+                success: false
+            });
+        }
+
         return res.status(200).json({
             message: "Recipe deleted successfully",
             success: true,
         });
+
     } catch (error) {
-        throw new ApiError(500, error.message);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false
+        });
     }
-}
+};
 
 const updateRecipe = async (req, res) => {
     try {
-        const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-        });
+        const recipe = await Recipe.findByIdAndUpdate(
+            req.params.id, 
+            req.body, 
+            { new: true }
+        );
+
+        if (!recipe) {
+            return res.status(404).json({
+                message: "Recipe not found",
+                success: false
+            });
+        }
+
         return res.status(200).json({
             message: "Recipe updated successfully",
             recipe,
             success: true,
         });
-    } catch (error) {
-        throw new ApiError(500, error.message);
-    }
-}
 
-export { createRecipe,deleteRecipe, getRecipe, getRecipebyId, updateRecipe };
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false
+        });
+    }
+};
+
+export { createRecipe, deleteRecipe, getRecipe, getRecipebyId, updateRecipe };
