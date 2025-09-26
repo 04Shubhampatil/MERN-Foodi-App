@@ -1,20 +1,28 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setLoading, setUser } from "../../redux/auth.js";
 import { useDispatch, useSelector } from "react-redux";
-import { Loader2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+
+// ✅ MUI Components
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
 
 function Login() {
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
+
   const dispatch = useDispatch();
   const { loading } = useSelector((store) => store.auth);
-
   const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
@@ -36,25 +44,20 @@ function Login() {
           withCredentials: true,
         }
       );
-      console.log(res.data); // Log the actual response data
+
       if (res.data.success) {
         dispatch(setUser(res.data.user));
         toast.success(res.data.message);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+        setTimeout(() => navigate("/"), 1000);
       }
     } catch (error) {
       if (error.response) {
-        // Server responded with status code not in 2xx
         toast.error(error.response.data.message || "Something went wrong!");
         console.error("Error Response:", error.response.data);
       } else if (error.request) {
-        // Request was made but no response
         toast.error("No response from server. Please try again later.");
         console.error("Error Request:", error.request);
       } else {
-        // Something else
         toast.error(error.message || "Unexpected error!");
         console.error("Error:", error.message);
       }
@@ -64,59 +67,75 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 ">
-      <form
-        onSubmit={submitHandler}
-        className="w-full max-w-md bg-white p-6 rounded-lg shadow-md"
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      bgcolor="#f4f6f8"
+      px={2}
+    >
+      <Paper
+        elevation={3}
+        sx={{ p: 4, borderRadius: 3, maxWidth: 400, width: "100%" }}
       >
-        <h1 className="text-2xl font-bold mb-4">Login</h1>
+        <Typography variant="h5" fontWeight="bold" mb={3} textAlign="center">
+          Login
+        </Typography>
 
-        {/* Email */}
-        <div className="mb-3">
-          <label className="block mb-1 font-medium">Email</label>
-          <input
+        <form onSubmit={submitHandler}>
+          {/* Email */}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Email"
             type="email"
             name="email"
             value={input.email}
             onChange={changeEventHandler}
-            placeholder="shubham@example.com"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-        </div>
 
-        {/* Password */}
-        <div className="mb-3">
-          <label className="block mb-1 font-medium">Password</label>
-          <input
+          {/* Password */}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Password"
             type="password"
             name="password"
             value={input.password}
             onChange={changeEventHandler}
-            placeholder="********"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-        </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md flex items-center justify-center"
-          disabled={loading}
-        >
-          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {loading ? "Please wait..." : " Login"}
-        </button>
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            variant="contained"
+            color="success"
+            fullWidth
+            disabled={loading}
+            sx={{ mt: 3, py: 1.2 }}
+          >
+            {loading ? (
+              <>
+                <CircularProgress size={20} sx={{ mr: 1 }} />
+                Please wait...
+              </>
+            ) : (
+              "Login"
+            )}
+          </Button>
+        </form>
 
-        {/* Login Link */}
-        <p className="text-sm mt-4 text-center">
-          dont have an account?
-          <Link to="/signup" className="text-indigo-600 hover:underline">
-            Login
+        {/* Signup Link */}
+        <Typography variant="body2" align="center" mt={3}>
+          Don’t have an account?{" "}
+          <Link to="/signup" style={{ color: "#15813C", textDecoration: "none" }}>
+            Sign Up
           </Link>
-        </p>
-        <Toaster position="top-right" />
-      </form>
-    </div>
+        </Typography>
+      </Paper>
+      <Toaster position="top-right" />
+    </Box>
   );
 }
 

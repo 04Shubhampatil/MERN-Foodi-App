@@ -1,24 +1,31 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { setLoading } from "../../redux/auth.js";
 import { useDispatch, useSelector } from "react-redux";
-import { Loader2 } from "lucide-react";
+import { setLoading } from "../../redux/auth.js";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
+// ✅ MUI Components
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
 
 function Signup() {
   const [input, setInput] = useState({
     fullname: "",
     email: "",
-
     password: "",
- 
+    file: null,
   });
+
   const dispatch = useDispatch();
   const { loading } = useSelector((store) => store.auth);
-
   const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
@@ -50,103 +57,116 @@ function Signup() {
           withCredentials: true,
         }
       );
-      console.log(res.data);
-      if(res.data.success){
+
+      if (res.data.success) {
         toast.success(res.data.message);
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
-      }
-      else{
+        setTimeout(() => navigate("/login"), 1000);
+      } else {
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.response?.data?.message || "Something went wrong!");
+      console.error(error);
     } finally {
       dispatch(setLoading(false));
     }
   };
 
   return (
-   <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 mt-8">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg overflow-hidden ">
-        {/* Card Header */}
-        
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      bgcolor="#f4f6f8"
+      position={"relative"}
+      zIndex={1000}
+      mt="80px"
+      px={2}
+    >
+      <Paper
+        elevation={3}
+        sx={{ p: 4, borderRadius: 3, maxWidth: 400, width: "100%" }}
+      >
+        <Typography variant="h5" fontWeight="bold" mb={3} textAlign="center">
+          Sign Up
+        </Typography>
 
-        {/* Card Body */}
-        <form onSubmit={submitHandler} className="p-6">
+        <form onSubmit={submitHandler}>
           {/* Fullname */}
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Full Name</label>
-            <input
-              type="text"
-              name="fullname"
-              value={input.fullname}
-              onChange={changeEventHandler}
-              placeholder="Shubham Patel"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Full Name"
+            name="fullname"
+            value={input.fullname}
+            onChange={changeEventHandler}
+          />
 
           {/* Email */}
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={input.email}
-              onChange={changeEventHandler}
-              placeholder="shubham@example.com"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Email"
+            type="email"
+            name="email"
+            value={input.email}
+            onChange={changeEventHandler}
+          />
 
           {/* Password */}
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={input.password}
-              onChange={changeEventHandler}
-              placeholder="********"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Password"
+            type="password"
+            name="password"
+            value={input.password}
+            onChange={changeEventHandler}
+          />
 
-          {/* Profile Upload */}
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Profile</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={changeFileHandler}
-              className="cursor-pointer border border-gray-300 rounded-md px-2 py-1 text-sm w-full"
-            />
-          </div>
+          {/* File Upload */}
+          <Button
+            variant="outlined"
+            color="success"
+            component="label"
+            fullWidth
+            sx={{ mt: 2, mb: 2 }}
+          >
+            Upload Profile
+            <input type="file" hidden accept="image/*" onChange={changeFileHandler} />
+          </Button>
 
           {/* Submit Button */}
-          <button
+          <Button
             type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md flex items-center justify-center"
+            variant="contained"
+            color="success"
+            fullWidth
             disabled={loading}
+            sx={{ py: 1.2 }}
           >
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {loading ? "Please wait..." : "Sign Up"}
-          </button>
-
-          {/* Footer */}
-          <p className="text-sm mt-4 text-center">
-            Already have an account?{" "}
-            <Link to="/login" className="text-indigo-600 hover:underline">
-              Login
-            </Link>
-          </p>
+            {loading ? (
+              <>
+                <CircularProgress size={20} sx={{ mr: 1 }} />
+                Please wait...
+              </>
+            ) : (
+              "Sign Up"
+            )}
+          </Button>
         </form>
-      </div>
 
+        {/* Footer */}
+        <Typography variant="body2" align="center" mt={3}>
+          Already have an account?{" "}
+          <Link to="/login" style={{ color: "#15813C", textDecoration: "none" }}>
+            Login
+          </Link>
+        </Typography>
+      </Paper>
       <Toaster position="top-right" />
-    </div>
+    </Box>
   );
 }
 
