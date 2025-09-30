@@ -1,8 +1,37 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { ChefHat, Clock, Star, Users } from "lucide-react";
-
+import { ChefHat, Clock, Link, Star, Users } from "lucide-react";
+import { Link as RouterLink  } from "react-router-dom";
+import { useSelector } from "react-redux";
+import  { useEffect, useState } from "react";
+import { useFavouriteRecipe } from "../hook/Isfavourites.jsx";
+import { useNavigate } from "react-router-dom";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 function Home() {
+  const { user, favourites } = useSelector((state) => state.auth);
+   const [items, setItems] = useState([]);
+   const navigate = useNavigate()
+  const { toggleFavourite } = useFavouriteRecipe();
+  const safeFavourites = Array.isArray(favourites) ? favourites : [];
+
+
+ 
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      setItems(JSON.parse(storedData));
+    }
+  }, []);
+
+
+
+
+
+  
+
+  
   const features = [
     { icon: <ChefHat className="w-8 h-8" />, title: "Expert Recipes", desc: "Curated by professional chefs" },
     { icon: <Clock className="w-8 h-8" />, title: "Quick & Easy", desc: "30-minute meals available" },
@@ -11,10 +40,10 @@ function Home() {
   ];
 
   const popularRecipes = [
-    { name: "Pasta Carbonara", time: "25 min", rating: "4.8" },
-    { name: "Vegetable Stir Fry", time: "20 min", rating: "4.6" },
-    { name: "Chocolate Cake", time: "45 min", rating: "4.9" },
-    { name: "Grilled Salmon", time: "30 min", rating: "4.7" },
+    { name: "Pasta Carbonara", img:"	https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1200&h=600&fit=crop", time: "25 min", rating: "4.8" },
+    { name: "Vegetable Stir Fry",img:"	https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1200&h=600&fit=crop", time: "20 min", rating: "4.6" },
+    { name: "Chocolate Cake", img:"	https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1200&h=600&fit=crop", time: "45 min", rating: "4.9" },
+    { name: "Grilled Salmon",  img:"	https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1200&h=600&fit=crop", time: "30 min", rating: "4.7" },
   ];
 
   return (
@@ -57,23 +86,9 @@ function Home() {
                     boxShadow: "0px 4px 14px rgba(0,0,0,0.2)",
                   }}
                 >
-                  Share Your Recipe
+                <RouterLink to={"/create-recipe"}>  Share Your Recipe</RouterLink>
                 </Button>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    borderColor: "#15803d",
-                    color: "#15803d",
-                    "&:hover": { borderColor: "#166534", backgroundColor: "#f0fdf4" },
-                    borderRadius: "12px",
-                    padding: "14px 32px",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    textTransform: "none",
-                  }}
-                >
-                  Explore Recipes
-                </Button>
+                
               </div>
             </div>
 
@@ -142,7 +157,45 @@ function Home() {
       </section>
 
       {/* Popular Recipes Section */}
-      <section className="py-16 bg-white">
+     {
+      user ?(
+         <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
+             Your Latest Recipes
+            </h2>
+            <p className="text-lg text-gray-600">Try our most loved recipes from the community</p>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {items.slice(-4).map((recipe) => {
+              const isFav = safeFavourites.find((r) => r._id === recipe._id);
+              return(
+              <div key={recipe._id} className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"  >
+                <div className="w-full h-40 bg-gradient-to-br from-green-100 to-yellow-100 rounded-lg mb-4" onClick={() => navigate(`/dummyrecipe/${recipe._id}`)}>
+                  <img
+                    src={recipe.coverImage || "	https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1200&h=600&fit=crop"}
+                    alt={recipe.name}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+                <h3 className="font-bold text-gray-800 text-lg mb-2">{recipe.title}</h3>
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>⏱️ {recipe.time}</span>
+                  <button onClick={() => toggleFavourite(recipe)}>{isFav ? <FavoriteIcon style={{ color: "#00A63E" }} /> : <FavoriteBorderIcon  /> }</button>
+                 
+                 
+                </div>
+              </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      ):(
+         <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
@@ -154,45 +207,26 @@ function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {popularRecipes.map((recipe, index) => (
               <div key={index} className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
-                <div className="w-full h-40 bg-gradient-to-br from-green-100 to-yellow-100 rounded-lg mb-4"></div>
+                <div className="w-full h-40 bg-gradient-to-br from-green-100 to-yellow-100 rounded-lg mb-4">
+                  <img
+                    src={recipe.img}
+                    alt={recipe.name}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
                 <h3 className="font-bold text-gray-800 text-lg mb-2">{recipe.name}</h3>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>⏱️ {recipe.time}</span>
-                  <span>⭐ {recipe.rating}</span>
+                 
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-green-500 to-green-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Ready to Start Cooking?
-          </h2>
-          <p className="text-green-100 text-lg mb-8">
-            Join thousands of food enthusiasts and share your culinary creations.
-          </p>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "white",
-              color: "#15803d",
-              "&:hover": { backgroundColor: "#f0fdf4" },
-              borderRadius: "12px",
-              padding: "14px 32px",
-              fontSize: "16px",
-              fontWeight: "bold",
-              textTransform: "none",
-              boxShadow: "0px 8px 20px rgba(0,0,0,0.2)",
-            }}
-          >
-            Get Started Today
-          </Button>
-        </div>
-      </section>
+      )
+     }
+     
     </div>
   );
 }

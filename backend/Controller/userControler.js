@@ -131,7 +131,12 @@ const LogIn = async (req, res) => {
 const logout = async (req, res) => {
     try {
         return res.status(200)
-            .cookie("token", "", { maxAge: 0 })
+            .cookie("token", "", { 
+                maxAge: 0,
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict'
+            })
             .json({
                 message: "Logged out successfully",
                 success: true
@@ -143,7 +148,6 @@ const logout = async (req, res) => {
         });
     }
 };
-
 export {
     registerUser,
     LogIn,

@@ -11,7 +11,7 @@ try {
 
     const decoded =  jwt.verify(token,process.env.SECRET_KEY)
 
-    req.id=decoded.user;
+         req.user = { _id: decoded.user }; 
     
     
     next()

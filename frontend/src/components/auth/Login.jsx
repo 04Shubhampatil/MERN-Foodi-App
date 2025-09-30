@@ -13,7 +13,11 @@ import {
   Typography,
   Paper,
   CircularProgress,
+  InputAdornment,
 } from "@mui/material";
+
+// ✅ MUI Icons
+import { Email, Lock, Login as LoginIcon } from "@mui/icons-material";
 
 function Login() {
   const [input, setInput] = useState({
@@ -79,7 +83,17 @@ function Login() {
         elevation={3}
         sx={{ p: 4, borderRadius: 3, maxWidth: 400, width: "100%" }}
       >
-        <Typography variant="h5" fontWeight="bold" mb={3} textAlign="center">
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          mb={3}
+          textAlign="center"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          gap={1}
+        >
+          <LoginIcon color="success" />
           Login
         </Typography>
 
@@ -93,6 +107,13 @@ function Login() {
             name="email"
             value={input.email}
             onChange={changeEventHandler}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Email color="action" />
+                </InputAdornment>
+              ),
+            }}
           />
 
           {/* Password */}
@@ -104,6 +125,13 @@ function Login() {
             name="password"
             value={input.password}
             onChange={changeEventHandler}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock color="action" />
+                </InputAdornment>
+              ),
+            }}
           />
 
           {/* Submit Button */}
@@ -114,6 +142,7 @@ function Login() {
             fullWidth
             disabled={loading}
             sx={{ mt: 3, py: 1.2 }}
+            startIcon={!loading && <LoginIcon />}
           >
             {loading ? (
               <>

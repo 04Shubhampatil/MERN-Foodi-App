@@ -11,11 +11,7 @@ router.post("/register",singleUpload, registerUser);
 
 // Login user
 router.post("/login", LogIn);
-
-// Logout user
-router.get("/logout",isAuthenticated, logout);
-
-// Get user
+router.post("/logout",isAuthenticated, logout);
 router.get("/:id",isAuthenticated, getUser);
 
 

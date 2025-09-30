@@ -4,7 +4,6 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../redux/auth.js";
 import toast, { Toaster } from "react-hot-toast";
-import { Loader2 } from "lucide-react";
 
 // ✅ MUI Components
 import {
@@ -14,7 +13,12 @@ import {
   Typography,
   Paper,
   CircularProgress,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+
+// ✅ MUI Icons
+import { Person, Email, Lock, Visibility, VisibilityOff, CloudUpload } from "@mui/icons-material";
 
 function Signup() {
   const [input, setInput] = useState({
@@ -23,6 +27,7 @@ function Signup() {
     password: "",
     file: null,
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
   const { loading } = useSelector((store) => store.auth);
@@ -79,9 +84,6 @@ function Signup() {
       alignItems="center"
       minHeight="100vh"
       bgcolor="#f4f6f8"
-      position={"relative"}
-      zIndex={1000}
-      mt="80px"
       px={2}
     >
       <Paper
@@ -101,6 +103,13 @@ function Signup() {
             name="fullname"
             value={input.fullname}
             onChange={changeEventHandler}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Person color="action" />
+                </InputAdornment>
+              ),
+            }}
           />
 
           {/* Email */}
@@ -112,6 +121,13 @@ function Signup() {
             name="email"
             value={input.email}
             onChange={changeEventHandler}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Email color="action" />
+                </InputAdornment>
+              ),
+            }}
           />
 
           {/* Password */}
@@ -119,10 +135,24 @@ function Signup() {
             fullWidth
             margin="normal"
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             value={input.password}
             onChange={changeEventHandler}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock color="action" />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           {/* File Upload */}
@@ -132,8 +162,9 @@ function Signup() {
             component="label"
             fullWidth
             sx={{ mt: 2, mb: 2 }}
+            startIcon={<CloudUpload />}
           >
-            Upload Profile
+            {input.file ? input.file.name : "Upload Profile"}
             <input type="file" hidden accept="image/*" onChange={changeFileHandler} />
           </Button>
 

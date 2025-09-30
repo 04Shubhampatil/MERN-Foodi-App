@@ -18,6 +18,8 @@ app.use(cors({
   credentials: true                  // allow cookies / auth headers
 }));
 
+
+
 app.get('/', (req, res) => {
     res.json({
         message:"hello"
