@@ -1,5 +1,4 @@
 import React from "react";
-import { useFavouriteRecipe } from "../hook/Isfavourites.jsx";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useDeleteRecipe from "../hook/Isdelete.jsx";
@@ -29,17 +28,13 @@ import {
   Edit,
   Delete,
 } from "@mui/icons-material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"; // if you also need outline
+
 
 
 function RecipeCard({ recipe, onDelete }) {
   const navigate = useNavigate();
-  const { toggleFavourite } = useFavouriteRecipe();
-  const { favourites, user } = useSelector((state) => state.auth);
-  const safeFavourites = Array.isArray(favourites) ? favourites : [];
+  const {  user } = useSelector((state) => state.auth);
 
-  const isFav = safeFavourites.find((r) => r._id === recipe._id);
   const isOwner = user && recipe.user === user._id;
 
   // Delete confirmation state
@@ -52,16 +47,7 @@ function RecipeCard({ recipe, onDelete }) {
   
   const { deleteRecipe, error: deleteError, isLoading: isDeleting } = useDeleteRecipe();
 
-  const handleFavouriteClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-    toggleFavourite(recipe);
-  };
+ 
 
   const handleEditClick = (e) => {
     e.preventDefault();
@@ -331,7 +317,7 @@ function RecipeCard({ recipe, onDelete }) {
           )}
         </CardContent>
 
-        {/* Bottom Actions - Favorite, Time, and Edit/Delete */}
+    
         <CardActions
           sx={{ p: 2, pt: 1, gap: 1, justifyContent: "space-between" }}
         >
@@ -405,36 +391,7 @@ function RecipeCard({ recipe, onDelete }) {
               </Tooltip>
             )}
 
-            {/* Favorite Button */}
-            <Tooltip
-              title={isFav ? "Remove from favorites" : "Add to favorites"}
-            >
-              <IconButton
-                size="small"
-                onClick={handleFavouriteClick}
-                sx={{
-                  backgroundColor: isFav
-                    ? "rgba(239, 68, 68, 0.1)"
-                    : "rgba(0, 0, 0, 0.04)",
-                  borderRadius: 2,
-                  width: 36,
-                  height: 36,
-                  "&:hover": {
-                    backgroundColor: isFav
-                      ? "rgba(239, 68, 68, 0.2)"
-                      : "rgba(0, 0, 0, 0.08)",
-                    transform: "scale(1.1)",
-                  },
-                  transition: "all 0.2s ease",
-                }}
-              >
-                {isFav ? (
-                  <FavoriteIcon sx={{ color: "#00A63E", fontSize: 18 }} />
-                ) : (
-                  <FavoriteBorderIcon sx={{ color: "#00A63E" , fontSize: 18 }} />
-                )}
-              </IconButton>
-            </Tooltip>
+        
           </Box>
         </CardActions>
 

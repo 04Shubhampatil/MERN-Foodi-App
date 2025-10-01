@@ -171,33 +171,7 @@ const updateRecipe = async (req, res) => {
 };
 
 
-const isFavorite = async (req, res) => {
-    try {
-        const recipe = await Recipe.findById(req.params.id);
 
-        if (!recipe) {
-            return res.status(404).json({
-                message: "Recipe not found",
-                success: false
-            });
-        }
 
-        recipe.isFavorite = !recipe.isFavorite;
-        await recipe.save();
 
-        return res.status(200).json({
-            success: true,
-            recipe: {
-                _id: recipe._id,
-                isFavorite: recipe.isFavorite
-            }
-        });
-    } catch (error) {
-        return res.status(500).json({
-            message: "Internal server error",
-            success: false
-        });
-    }
-};
-
-export { createRecipe, deleteRecipe, getRecipe, getRecipebyId, updateRecipe, isFavorite };
+export { createRecipe, deleteRecipe, getRecipe, getRecipebyId, updateRecipe };

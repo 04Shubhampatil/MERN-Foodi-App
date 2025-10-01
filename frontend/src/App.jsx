@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import CreateRecipe from "./pages/CreateRecipe.jsx";
 import SingleRecipe from "./pages/SingleRecipe.jsx";
-import Favourite from "./pages/Favourite.jsx";
+
 import ErrorPage from "./pages/ErrorPage.jsx";
 import DummyRecipe from "./pages/DummyRecipe.jsx";
 import UpdateRecipe from "./pages/UpdateRecipe.jsx";
@@ -23,7 +23,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/myrecipe/:username" element={<MyRecipe />} />
             <Route path="/create-recipe" element={<CreateRecipe />} />
-            <Route path="/Favourite" element={<Favourite />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/recipe/:id" element={<SingleRecipe />} />

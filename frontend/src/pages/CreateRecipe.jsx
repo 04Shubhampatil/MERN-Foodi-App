@@ -95,9 +95,7 @@ function CreateRecipe() {
         2. [step 2]
         (list all steps)
         
-        Cooking Time: [time in minutes]
-        
-        Make it creative and delicious!
+        Cooking Time: [ eg.30 min]
       `);
 
       // Parse AI response
@@ -169,7 +167,9 @@ function CreateRecipe() {
       );
 
       if (res.data.success) {
-        toast.success(res.data.message || "Recipe created successfully!");
+        toast.success(res.data.message || "Recipe created successfully!", {
+          duration: 3000 // Toast will disappear after 3 seconds
+        });
 
         // Reset form
         setInput({
@@ -569,7 +569,7 @@ function CreateRecipe() {
         </Card>
       </Container>
 
-      <Toaster position="top-right" />
+      <Toaster position="top-right"  />
     </Box>
   );
 }

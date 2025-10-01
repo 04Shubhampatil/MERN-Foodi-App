@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { useFavouriteRecipe } from "../hook/Isfavourites.jsx";
+
 import {
   ArrowBack,
-  Favorite,
-  FavoriteBorder,
+
   AccessTime,
   People,
   Whatshot,
@@ -22,14 +20,12 @@ import {
 function SingleRecipe() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { toggleFavourite } = useFavouriteRecipe();
-  const { favourites, user } = useSelector((state) => state.auth);
+
   const [singleRecipe, setSingleRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("ingredients");
 
-  const safeFavourites = Array.isArray(favourites) ? favourites : [];
-  const isFav = safeFavourites.find((r) => r._id === id);
+
 
   useEffect(() => {
     if (id) {
@@ -53,15 +49,7 @@ function SingleRecipe() {
     fetchRecipe();
   }, [id]);
 
-  const handleFavouriteClick = () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-    if (singleRecipe) {
-      toggleFavourite(singleRecipe);
-    }
-  };
+
 
   const formatIngredients = (ingredients) => {
     if (Array.isArray(ingredients)) {
@@ -140,17 +128,7 @@ function SingleRecipe() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
             
-            {/* Favorite Button */}
-            <button
-              onClick={handleFavouriteClick}
-              className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-2xl p-3 shadow-2xl hover:scale-110 transition-all duration-200"
-            >
-              {isFav ? (
-                <Favorite className="text-2xl text-[#00A63E]" />
-              ) : (
-                <FavoriteBorder className="text-2xl text-gray-600" />
-              )}
-            </button>
+           
 
             {/* Recipe Title and Info Overlay */}
             <div className="absolute bottom-6 left-6 right-6 text-white">

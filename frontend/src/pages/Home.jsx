@@ -4,16 +4,13 @@ import { ChefHat, Clock, Link, Star, Users } from "lucide-react";
 import { Link as RouterLink  } from "react-router-dom";
 import { useSelector } from "react-redux";
 import  { useEffect, useState } from "react";
-import { useFavouriteRecipe } from "../hook/Isfavourites.jsx";
 import { useNavigate } from "react-router-dom";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+
 function Home() {
-  const { user, favourites } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
    const [items, setItems] = useState([]);
    const navigate = useNavigate()
-  const { toggleFavourite } = useFavouriteRecipe();
-  const safeFavourites = Array.isArray(favourites) ? favourites : [];
+
 
 
  
@@ -170,7 +167,7 @@ function Home() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {items.slice(-4).map((recipe) => {
-              const isFav = safeFavourites.find((r) => r._id === recipe._id);
+             
               return(
               <div key={recipe._id} className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"  >
                 <div className="w-full h-40 bg-gradient-to-br from-green-100 to-yellow-100 rounded-lg mb-4" onClick={() => navigate(`/dummyrecipe/${recipe._id}`)}>
@@ -183,7 +180,7 @@ function Home() {
                 <h3 className="font-bold text-gray-800 text-lg mb-2">{recipe.title}</h3>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>⏱️ {recipe.time}</span>
-                  <button onClick={() => toggleFavourite(recipe)}>{isFav ? <FavoriteIcon style={{ color: "#00A63E" }} /> : <FavoriteBorderIcon  /> }</button>
+                  <span>⭐</span>
                  
                  
                 </div>
@@ -217,6 +214,7 @@ function Home() {
                 <h3 className="font-bold text-gray-800 text-lg mb-2">{recipe.name}</h3>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>⏱️ {recipe.time}</span>
+
                  
                 </div>
               </div>
