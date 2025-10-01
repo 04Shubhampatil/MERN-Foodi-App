@@ -8,9 +8,9 @@ import getDataUri from "../utils/datauri.js";
 const createRecipe = async (req, res) => {
     try {
         const { title, ingredients, instructions, time } = req.body;
-    const userId = req.user._id;
+        const userId = req.user._id;
 
-        
+
         if (!title || !ingredients || !instructions || !time) {
             return res.status(400).json({
                 message: "All fields are required",
@@ -56,7 +56,7 @@ const getRecipe = async (req, res) => {
 
 
     try {
-        const recipes = await Recipe.find({user: userId})
+        const recipes = await Recipe.find({ user: userId })
         return res.status(200).json({
             message: "Recipes fetched successfully",
             recipes,
@@ -76,7 +76,7 @@ const getRecipe = async (req, res) => {
 const getRecipebyId = async (req, res) => {
     try {
         const recipe = await Recipe.findById(req.params.id);
-        
+
         if (!recipe) {
             return res.status(404).json({
                 message: "Recipe not found",
@@ -101,7 +101,7 @@ const getRecipebyId = async (req, res) => {
 const deleteRecipe = async (req, res) => {
     try {
         const recipe = await Recipe.findByIdAndDelete(req.params.id);
-        
+
         if (!recipe) {
             return res.status(404).json({
                 message: "Recipe not found",
@@ -128,7 +128,7 @@ const updateRecipe = async (req, res) => {
 
         let coverImage = null;
 
-     
+
         if (req.file) {
             const fileUri = getDataUri(req.file);
             const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
@@ -137,7 +137,7 @@ const updateRecipe = async (req, res) => {
             coverImage = cloudResponse.secure_url;
         }
 
-        
+
         const recipe = await Recipe.findById(req.params.id);
 
         if (!recipe) {
@@ -147,7 +147,7 @@ const updateRecipe = async (req, res) => {
             });
         }
 
-       
+
         if (title) recipe.title = title;
         if (ingredients) recipe.ingredients = ingredients;
         if (instructions) recipe.instructions = instructions;
@@ -186,11 +186,12 @@ const isFavorite = async (req, res) => {
         await recipe.save();
 
         return res.status(200).json({
-            message: "Recipe favorite status updated",
-            recipe,
             success: true,
+            recipe: {
+                _id: recipe._id,
+                isFavorite: recipe.isFavorite
+            }
         });
-
     } catch (error) {
         return res.status(500).json({
             message: "Internal server error",

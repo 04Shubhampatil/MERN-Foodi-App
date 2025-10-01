@@ -12,17 +12,16 @@ export const useFavouriteRecipe = () => {
     async (recipe) => {
       if (!recipe || !recipe._id) return;
 
-      // Compute safeFavourites inside the callback
       const safeFavourites = Array.isArray(favourites) ? favourites : [];
-      const isFav = safeFavourites.find((r) => r._id === recipe._id);
+      const isFav = safeFavourites.some((r) => r._id === recipe._id);
 
       dispatch(setLoading(true));
       setError(null);
 
       try {
-        const res = await axios.put(
+        const res = await axios.get(
           `http://localhost:5500/api/recipe/${recipe._id}/favorite`,
-          {},
+          
           {
             headers: { "Content-Type": "application/json" },
             withCredentials: true,
@@ -30,13 +29,13 @@ export const useFavouriteRecipe = () => {
         );
 
         if (res.data?.success) {
-          if (isFav) {
+          const updatedRecipe = res.data.recipe;
+
+          if (updatedRecipe.isFavorite && !isFav) {
+            dispatch(addFavourite(updatedRecipe));
+          } else if (!updatedRecipe.isFavorite && isFav) {
             dispatch(removeFavourite(recipe));
-          } else {
-            dispatch(addFavourite(res.data.recipe));
           }
-        } else {
-          setError(res.data?.message || "Failed to toggle favourite");
         }
       } catch (err) {
         console.error("Error toggling favourite:", err);
@@ -45,7 +44,7 @@ export const useFavouriteRecipe = () => {
         dispatch(setLoading(false));
       }
     },
-    [dispatch, favourites] // only include favourites and dispatch in deps
+    [dispatch, favourites] // only depend on favourites, no need for safeFavourites
   );
 
   return { toggleFavourite, error };

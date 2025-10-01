@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon backend/index.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "node backend/index.js"
   },
   "keywords": [
     "react",
@@ -24,6 +26,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.2",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "path": "^0.12.7"
   }
 }

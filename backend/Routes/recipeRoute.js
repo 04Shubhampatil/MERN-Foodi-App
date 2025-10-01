@@ -15,8 +15,7 @@ router.get("/:id", isAuthenticated, getRecipebyId);
 router.post("/create", isAuthenticated, singleUpload, createRecipe);
 router.post("/:id",isAuthenticated,singleUpload, updateRecipe);
 router.delete("/:id",isAuthenticated, deleteRecipe);
-router.get("/:id/favorite", isAuthenticated, isFavorite);
-
+router.put("/:id/favorite", isAuthenticated, isFavorite);
 
 
 

@@ -22,8 +22,8 @@ import {
   Alert,
 } from "@mui/material";
 import {
-  Favorite,
-  FavoriteBorder,
+  FavoriteBorderIcon,
+  FavoriteIcon,
   AccessTime,
   Schedule,
   Restaurant,
@@ -427,9 +427,9 @@ function RecipeCard({ recipe, onDelete }) {
                 }}
               >
                 {isFav ? (
-                  <Favorite sx={{ color: "#ef4444", fontSize: 18 }} />
+                  <FavoriteIcon sx={{ color: "#00A63E", fontSize: 18 }} />
                 ) : (
-                  <FavoriteBorder sx={{ color: "#6b7280", fontSize: 18 }} />
+                  <FavoriteBorderIcon sx={{ color: "#00A63E" , fontSize: 18 }} />
                 )}
               </IconButton>
             </Tooltip>
