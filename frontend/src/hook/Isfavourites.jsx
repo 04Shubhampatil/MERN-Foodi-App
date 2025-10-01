@@ -20,7 +20,7 @@ export const useFavouriteRecipe = () => {
 
       try {
         const res = await axios.get(
-          `https://mern-foodi-app.onrender.com/api/recipe/${recipe._id}/favorite`,
+          `https://mern-foodi-app.onrender.com/api/recipe/${recipe._id}`,
           
           {
             headers: { "Content-Type": "application/json" },
