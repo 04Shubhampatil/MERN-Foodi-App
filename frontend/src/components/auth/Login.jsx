@@ -38,7 +38,7 @@ function Login() {
     try {
       dispatch(setLoading(true));
       const res = await axios.post(
-        "http://localhost:5500/api/user/login",
+        "https://mern-foodi-app.onrender.com/api/user/login",
         {
           email: input.email,
           password: input.password,

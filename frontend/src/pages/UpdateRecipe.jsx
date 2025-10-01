@@ -17,7 +17,7 @@ function UpdateRecipe() {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const res = await axios.get(`http://localhost:5500/api/recipe/${id}`, {
+        const res = await axios.get(`https://mern-foodi-app.onrender.com/api/recipe/${id}`, {
           withCredentials: true,
         });
         if (res.data.success) {
@@ -50,7 +50,7 @@ function UpdateRecipe() {
       if (coverImage) formData.append("file", coverImage); // ✅ Correct file append
 
       const { data } = await axios.post(
-        `http://localhost:5500/api/recipe/${id}`,
+        `https://mern-foodi-app.onrender.com/api/recipe/${id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

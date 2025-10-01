@@ -160,7 +160,7 @@ function CreateRecipe() {
       }
 
       const res = await axios.post(
-        "http://localhost:5500/api/recipe/create",
+        "https://mern-foodi-app.onrender.com/api/recipe/create",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

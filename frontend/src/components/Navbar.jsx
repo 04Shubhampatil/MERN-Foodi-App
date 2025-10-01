@@ -76,7 +76,7 @@ function Navbar(props) {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5500/api/user/logout",
+        "https://mern-foodi-app.onrender.com/api/user/logout",
         {},
         {
           headers: { "Content-Type": "application/json" },

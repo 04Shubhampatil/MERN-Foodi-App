@@ -55,7 +55,7 @@ function Signup() {
       }
 
       const res = await axios.post(
-        "http://localhost:5500/api/user/register",
+        "https://mern-foodi-app.onrender.com/api/user/register",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

@@ -26,7 +26,7 @@ function MyRecipe() {
       dispatch(setLoading(true));
       try {
         const res = await axios.get(
-          `http://localhost:5500/api/recipe/user/${user._id}`,
+          `https://mern-foodi-app.onrender.com/api/recipe/user/${user._id}`,
           {
             headers: { "Content-Type": "application/json" },
             withCredentials: true,

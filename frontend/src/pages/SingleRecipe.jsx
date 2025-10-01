@@ -37,7 +37,7 @@ function SingleRecipe() {
     }
     const fetchRecipe = async () => {
       try {
-        const res = await axios.get(`http://localhost:5500/api/recipe/${id}`, {
+        const res = await axios.get(`https://mern-foodi-app.onrender.com/api/recipe/${id}`, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         });

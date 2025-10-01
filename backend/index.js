@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(cors({
-  origin: "http://localhost:5173",   // your React app’s dev server
+  origin: "https://mern-foodi-app.onrender.com/",   // your React app’s dev server
   credentials: true                  // allow cookies / auth headers
 }));
 

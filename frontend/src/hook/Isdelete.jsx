@@ -3,7 +3,7 @@ import axios from "axios";
 function useDeleteRecipe() {
   const deleteRecipe = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5500/api/recipe/${id}`, {
+      const res = await axios.delete(`https://mern-foodi-app.onrender.com/api/recipe/${id}`, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
