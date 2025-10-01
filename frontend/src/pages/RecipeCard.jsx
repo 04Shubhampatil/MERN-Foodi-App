@@ -22,14 +22,16 @@ import {
   Alert,
 } from "@mui/material";
 import {
-  FavoriteBorderIcon,
-  FavoriteIcon,
+ 
   AccessTime,
   Schedule,
   Restaurant,
   Edit,
   Delete,
 } from "@mui/icons-material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"; // if you also need outline
+
 
 function RecipeCard({ recipe, onDelete }) {
   const navigate = useNavigate();
